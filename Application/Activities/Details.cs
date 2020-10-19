@@ -1,10 +1,8 @@
 using MediatR;
 using Domain;
-using System.Collections.Generic;
 using Persistence;
 using System.Threading.Tasks;
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Application.Activities
