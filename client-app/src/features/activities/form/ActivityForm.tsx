@@ -9,9 +9,10 @@ interface IProps {
   setEditMode: (editMode: boolean) => void;
   createActivity: (activity: IActivity) => void;
   editActivity: (activity: IActivity) => void;
+  submitting: boolean;
 }
 
-export const ActivityForm: React.FC<IProps> = ({ setEditMode, activity : initializeFormState, createActivity, editActivity }) => {
+export const ActivityForm: React.FC<IProps> = ({ setEditMode, activity : initializeFormState, createActivity, submitting, editActivity }) => {
   
   const initializeForm = () => {
     if (initializeFormState) {
@@ -61,7 +62,7 @@ export const ActivityForm: React.FC<IProps> = ({ setEditMode, activity : initial
         <Form.Input onChange={handleInputChange} name='city' placeholder='city' value={activity.city}/>
         <Form.Input onChange={handleInputChange} name='venue' placeholder='venue' value={activity.venue} />
         <Button.Group widths={2}>
-          <Button color='green' type='submit' name='saveForm' content='Save' />
+          <Button loading={submitting} color='green' type='submit' name='saveForm' content='Save' />
           <Button onClick={() => setEditMode(false)} color='grey' basic  name='cancelForm' content='Cancel' />
         </Button.Group>
       </Form>
