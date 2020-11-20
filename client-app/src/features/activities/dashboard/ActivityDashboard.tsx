@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite'
 import React, { SyntheticEvent } from 'react'
 import { Grid } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/actvity'
@@ -33,3 +34,5 @@ export const ActivityDashboard: React.FC<IProps> = ({activities, selectActivity,
     </Grid>
   )
 }
+
+export default ActivityDashboard;

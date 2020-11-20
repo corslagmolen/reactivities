@@ -1,20 +1,24 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import React, { useState, useEffect, SyntheticEvent, useContext } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Container, Header } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import { IActivity } from '../models/actvity';
 import { NavBar } from '../../features/nav/NavBar';
 import { ActivityDashboard } from '../../features/activities/dashboard/ActivityDashboard';
 import agent from '../api/agent';
 import { LoaderComponent } from './LoaderComponent';
+import ActivityStore from '../stores/activityStore';
+import { observer } from 'mobx-react';
 
 
 
 const App = () => {
 
+  const activityStore = useContext(ActivityStore);
+
+
   const [activities, setActivities] = useState<IActivity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [target, setTarget] = useState("");
 
@@ -56,26 +60,19 @@ const App = () => {
   }
 
   useEffect(() => {
-    agent.Activities.list().then(
-      (response) => {
-        let activities: IActivity[] = [];
-        response.forEach((activity : IActivity) => {
-          activity.date = activity.date.split('.')[0]
-          activities.push(activity);
-        })
-        setActivities(activities);
-      }).then(() => setLoading(false));
-  }, []
+    activityStore.loadActivities();
+  }, [activityStore] //dependency
   );
-  if (loading) {
-    return <LoaderComponent inverted={true}  content="loading activities...."/>
-  }
+  if (activityStore.loadingInitial) {
+    return <LoaderComponent inverted={true} content="loading activities...." />
+  } 
+  
   return (
     <div>
-        <NavBar handleOpenCreateActivity={handleOpenCreateActivity}/>
-      <Container style={{marginTop: "7em"}}>
+      <NavBar handleOpenCreateActivity={handleOpenCreateActivity} />
+      <Container style={{ marginTop: "7em" }}>
         <ActivityDashboard
-          activities={activities}
+          activities={activityStore.activities}
           selectActivity={handleSelectActivity}
           selectedActivity={selectedActivity!}
           setSelectedActivity={setSelectedActivity}
@@ -85,13 +82,13 @@ const App = () => {
           editActivity={handleEditActivity}
           deleteActivity={handleDeleteActivity}
           submitting={submitting}
-          target={target}/>
+          target={target} />
         
       </Container>
       
     </div >
   );
 
-}
+};
 
-export default App;
+export default observer(App);

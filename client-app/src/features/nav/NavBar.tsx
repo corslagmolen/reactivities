@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { Button, Container, Menu } from 'semantic-ui-react'
 
@@ -19,3 +20,4 @@ export const NavBar: React.FC<IProps> = ({ handleOpenCreateActivity }) => {
     </Menu>
   )
 }
+export default NavBar;
